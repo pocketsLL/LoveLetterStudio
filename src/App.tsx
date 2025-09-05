@@ -25,11 +25,9 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
-  // Data
   const [entries, setEntries] = useState<ArtistEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load approved entries (shared) from Supabase, otherwise fall back to localStorage
   useEffect(() => {
     (async () => {
       try {
@@ -65,7 +63,6 @@ export default function App() {
     })();
   }, []);
 
-  // Cities loader
   const [worldLocations, setWorldLocations] = useState<string[]>([]);
   useEffect(() => {
     fetch("/cities.json").then(r => r.ok ? r.json() : []).then((list) => {
@@ -73,7 +70,6 @@ export default function App() {
     }).catch(() => {});
   }, []);
 
-  // Filters
   const [q, setQ] = useState("");
   const [filterArt, setFilterArt] = useState("all");
   const [filterLocation, setFilterLocation] = useState("all");
@@ -89,7 +85,6 @@ export default function App() {
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [entries, filterArt, filterLocation, q]);
 
-  // Routes
   const artistMatch = route.match(/^#\/artist\/(.+)$/);
   const adminMatch = route.match(/^#\/admin$/);
 
@@ -98,10 +93,7 @@ export default function App() {
     const entry = entries.find((e) => e.id === id);
     return <ArtistPage entry={entry} />;
   }
-
-  if (adminMatch) {
-    return <AdminPage />;
-  }
+  if (adminMatch) return <AdminPage />;
 
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-800 font-mono">
@@ -175,7 +167,6 @@ function ArtistPage({ entry }: { entry?: ArtistEntry }) {
   );
 }
 
-// Admin page
 function AdminPage() {
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState<any[]>([]);
@@ -284,7 +275,6 @@ function SubmissionForm({ knownLocations }: { knownLocations: string[] }) {
     try {
       let imageUrls: string[] = [];
       if (supabase && images.length) {
-        // Upload images to Supabase storage (bucket: images)
         for (let i = 0; i < images.length; i++) {
           const dataUrl = images[i];
           const blob = await (await fetch(dataUrl)).blob();
@@ -328,7 +318,6 @@ function SubmissionForm({ knownLocations }: { knownLocations: string[] }) {
 
       setJustSubmitted(true);
       setTimeout(() => setJustSubmitted(false), 60000);
-      // Reset
       setName(""); setArtTypes([]); setLocation(""); setBio(""); setLinks([{ label: "Instagram", url: "" }]); setImages([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -460,10 +449,10 @@ function Directory(props: {
       {props.loading ? <div>Loading…</div> : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {props.entries.map((e) => <ArtistCard key={e.id} entry={e} />)}
-          {props.entries.length === 0 && (
+          {props.entries.length === 0 and (
             <div className="col-span-full text-center text-neutral-400 py-10">
               No entries yet.
-              {SHOW_ADMIN_HINT && <div className="mt-2 text-xs text-neutral-500">Tip: go to <code>#/admin</code> and approve pending submissions.</div>}
+              {SHOW_ADMIN_HINT and <div className="mt-2 text-xs text-neutral-500">Tip: go to <code>#/admin</code> and approve pending submissions.</div>}
             </div>
           )}
         </div>
@@ -496,14 +485,14 @@ function ArtistCard({ entry }: { entry: ArtistEntry }) {
         </div>
         {entry.bio && <p className="text-sm">{entry.bio}</p>}
         <button onClick={() => setOpen(!open)} className="text-sm underline">{open ? "Hide details" : "View details"}</button>
-        {open && (
+        {open and (
           <div className="pt-2 space-y-3">
-            {entry.images?.length > 1 && (
+            {entry.images?.length > 1 and (
               <div className="grid grid-cols-3 gap-2">
                 {entry.images.slice(1).map((src, i) => <img key={i} src={src} alt="art" className="w-full h-24 object-cover rounded" />)}
               </div>
             )}
-            {entry.links?.length > 0 && (
+            {entry.links?.length > 0 and (
               <div className="flex flex-wrap gap-2">
                 {entry.links.map((l, i) => (
                   <a key={i} href={normalizeUrl(l.url)} target="_blank" rel="noreferrer" className="text-sm px-2 py-1 rounded border border-neutral-300 hover:bg-neutral-100">{l.label}</a>
@@ -541,7 +530,6 @@ const ART_TYPE_OPTIONS = [
   "3D/CGI","Sculpture","Installation","Performance","Sound/Music","DJ/Producer","Fashion/Textiles","Accessories/Jewellery",
   "Product/Industrial","Architecture","Interior","Motion Design","Game Art","Mixed Media","Collage","Graffiti","Street Art",
   "Zine/Publishing","Curatorial","Creative Direction",
-  // Additions for broader inclusion:
   "Tattoo","Nail Artist","Calligraphy","Printmaking","Ceramics","Poetry/Spoken Word","Creative Coding/Generative","AI Art","Data Art","New Media",
   "Set Design","Production Design","Costume","Styling","HMUA (Hair/Makeup)","Lighting Design","Gaffer","Stage Design","Projection/VJ",
 ];
