@@ -268,7 +268,7 @@ function SubmissionForm({ knownLocations }: { knownLocations: string[] }) {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || artTypes.length === 0 || !location.trim()) {
-      alert("Please fill name, choose up to 3 disciplines, and set a location.");
+      alert("Please fill name, choose up to 3 disciplines, && set a location.");
       return;
     }
     setSaving(true);
@@ -334,11 +334,11 @@ function SubmissionForm({ knownLocations }: { knownLocations: string[] }) {
     <section className="grid md:grid-cols-5 gap-8">
       <div className="md:col-span-5">
         <h2 className="text-lg mb-2 text-pink-600">Submit your work</h2>
-        <p className="text-sm text-neutral-600 mb-2">Required: Name, up to 3 disciplines, and Location.</p>
+        <p className="text-sm text-neutral-600 mb-2">Required: Name, up to 3 disciplines, && Location.</p>
         <p className="text-xs text-neutral-500 mb-6">Disclaimer: Submissions can’t be edited or deleted by artists at this stage. If you need a change or removal, please contact support.</p>
         {justSubmitted && (
           <div className="mb-4 rounded border border-neutral-300 bg-neutral-100 px-3 py-2 text-sm">
-            Thanks! Your submission was received and is <span className="text-pink-600">awaiting moderation</span>.
+            Thanks! Your submission was received && is <span className="text-pink-600">awaiting moderation</span>.
           </div>
         )}
         <form onSubmit={submit} className="space-y-5">
@@ -449,10 +449,10 @@ function Directory(props: {
       {props.loading ? <div>Loading…</div> : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {props.entries.map((e) => <ArtistCard key={e.id} entry={e} />)}
-          {props.entries.length === 0 and (
+          {props.entries.length === 0 && (
             <div className="col-span-full text-center text-neutral-400 py-10">
               No entries yet.
-              {SHOW_ADMIN_HINT and <div className="mt-2 text-xs text-neutral-500">Tip: go to <code>#/admin</code> and approve pending submissions.</div>}
+              {SHOW_ADMIN_HINT && <div className="mt-2 text-xs text-neutral-500">Tip: go to <code>#/admin</code> && approve pending submissions.</div>}
             </div>
           )}
         </div>
@@ -485,14 +485,14 @@ function ArtistCard({ entry }: { entry: ArtistEntry }) {
         </div>
         {entry.bio && <p className="text-sm">{entry.bio}</p>}
         <button onClick={() => setOpen(!open)} className="text-sm underline">{open ? "Hide details" : "View details"}</button>
-        {open and (
+        {open && (
           <div className="pt-2 space-y-3">
-            {entry.images?.length > 1 and (
+            {entry.images?.length > 1 && (
               <div className="grid grid-cols-3 gap-2">
                 {entry.images.slice(1).map((src, i) => <img key={i} src={src} alt="art" className="w-full h-24 object-cover rounded" />)}
               </div>
             )}
-            {entry.links?.length > 0 and (
+            {entry.links?.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {entry.links.map((l, i) => (
                   <a key={i} href={normalizeUrl(l.url)} target="_blank" rel="noreferrer" className="text-sm px-2 py-1 rounded border border-neutral-300 hover:bg-neutral-100">{l.label}</a>
